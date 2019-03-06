@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="css.css">
+</head>
+<body>
+<section class="gameWrap">
+    <table id="table" class="gameField" >
+        <caption class="titel">15</caption>
+        <tbody class="gameField" onclick="move()">
+        <tr><td id="0" data-colum="0" data-row="0" class="oneSquare"></td><td id="1" data-colum="1" data-row="0" class="oneSquare"></td><td id="2" data-colum="2" data-row="0" class="oneSquare"></td><td id="3" data-colum="3" data-row="0" class="oneSquare"></td></tr>
+        <tr><td id="4" data-colum="0" data-row="1" class="oneSquare"></td><td id="5" data-colum="1" data-row="1" class="oneSquare"></td><td id="6" data-colum="2" data-row="1" class="oneSquare"></td><td id="7" data-colum="3" data-row="1" class="oneSquare"></td></tr>
+        <tr><td id="8" data-colum="0" data-row="2" class="oneSquare"></td><td id="9" data-colum="1" data-row="2" class="oneSquare"></td><td id="10" data-colum="2" data-row="2" class="oneSquare"></td><td id="11" data-colum="3" data-row="2" class="oneSquare"></td></tr>
+        <tr><td id="12" data-colum="0" data-row="3" class="oneSquare"></td><td id="13" data-colum="1" data-row="3" class="oneSquare"></td><td id="14" data-colum="2" data-row="3" class="oneSquare"></td><td id="15" data-colum="3" data-row="3" class="oneSquare"></td></tr>
+        </tbody>
+    </table>
+    <div class="buttonWrap">
+        <button class="start" onclick="newGame()">NEW GAME</button>
+    </div>
+    <div id="win" class="winWrap" hidden>
+        <h1 class="win">you win</h1>
+    </div>
+</section>
+</body>
+<script src="app.js"></script>
+</html>
