@@ -1,103 +1,112 @@
 function winConditions() {
-    const table = document.getElementById('table');
+    const gameFieldTable = document.getElementById('table');
+    const winImg = document.getElementById('win');
+    const gameFieldTableBody = document.getElementById('tbody');
 
-    const tableSizeRows = table.rows.length;
-    const tableSizeColumn = table.rows[0].cells.length;
-    var counter = 0;
-    var controller = true;
-
+    const tableSizeRows = 4;
+    const tableSizeColumn = 4;
+    let quantityOfNumbersInTableOnCorrectPlaces = 0;
+    let victory = true;
+    
     /*first condition*/
     for (let i = 0; i < tableSizeRows; i++) {
         for (let j = 0; j < tableSizeColumn; j++) {
-            counter++;
-            if(counter > 15) {
+            quantityOfNumbersInTableOnCorrectPlaces++;
+            if(quantityOfNumbersInTableOnCorrectPlaces > 15) {
                 break;
             }
-            if(+table.rows[i].cells[j].innerText !== counter){
-                controller = false;
+            if(+gameFieldTable.rows[i].cells[j].innerText !== quantityOfNumbersInTableOnCorrectPlaces){
+                victory = false;
                 break;
             }
         }
     }
 
-    if(controller){
-        document.getElementById('win').hidden = false;
+    if(victory){
+        gameFieldTableBody.removeEventListener('click', move, false);
+        winImg.hidden = false;
         return;
     }
 
     /*second condition*/
-    controller = true;
-    counter = 16;
+    victory = true;
+    quantityOfNumbersInTableOnCorrectPlaces = 16;
     for (let i = tableSizeRows - 1; i >= 0 ; --i) {
         for (let j = tableSizeColumn - 1; j >= 0; --j) {
 
-            counter--;
-            if(counter < 1) {
+            quantityOfNumbersInTableOnCorrectPlaces--;
+            if(quantityOfNumbersInTableOnCorrectPlaces < 1) {
                 break;
             }
-            if(+table.rows[i].cells[j].innerText !== counter){
-                controller = false;
+            if(+gameFieldTable.rows[i].cells[j].innerText !== quantityOfNumbersInTableOnCorrectPlaces){
+                victory = false;
                 break;
             }
         }
     }
 
-    if(controller){
-        document.getElementById('win').hidden = false;
+    if(victory){
+        gameFieldTableBody.removeEventListener('click', move, false);
+        winImg.hidden = false;
         return;
     }
 
     /*third condition*/
-    controller = true;
-    counter = 0;
+    victory = true;
+    quantityOfNumbersInTableOnCorrectPlaces = 0;
     for (let i = 0; i < tableSizeRows; i++) {
         for (let j = 0; j < tableSizeColumn; j++) {
-            counter++;
-            if(counter > 15) {
+            quantityOfNumbersInTableOnCorrectPlaces++;
+            if(quantityOfNumbersInTableOnCorrectPlaces > 15) {
                 break;
             }
-            if(+table.rows[j].cells[i].innerText !== counter){
-                controller = false;
+            if(+gameFieldTable.rows[j].cells[i].innerText !== quantityOfNumbersInTableOnCorrectPlaces){
+                victory = false;
                 break;
             }
         }
     }
 
-    if(controller){
-        document.getElementById('win').hidden = false;
+    if(victory){
+        gameFieldTableBody.removeEventListener('click', move, false);
+        winImg.hidden = false;
         return;
     }
 }
 
 function newGame() {
+    const gameFieldTableBody = document.getElementById('tbody');
+    gameFieldTableBody.addEventListener('click', move, false);
+
+    /*перемешивание чисел*/
     document.getElementById('win').hidden = true;
 
-    const table = document.getElementById('table');
+    const gameFieldTable = document.getElementById('table');
 
-    var arr = [];
+    let arr = [];
     for (let i = 0; i < 15; ++i){
         arr[i] = i + 1;
     }
 
-    var currentIndex = arr.length;
+    let currentIndex = arr.length;
     while (currentIndex !== 0){
-        var randomIndex = Math.floor(Math.random() * currentIndex);
+        let randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex -= 1;
 
-        var temporaryValue = arr[currentIndex];
+        let temporaryValue = arr[currentIndex];
         arr[currentIndex] = arr[randomIndex];
         arr[randomIndex] = temporaryValue;
     }
-
+//-------------
     arr.push('');
 
-    const tableSizeRows = table.rows.length;
-    const tableSizeColumn = table.rows[0].cells.length;
-    var counter = 0;
+    const tableSizeRows = 4;
+    const tableSizeColumn = 4;
+    let indexOfElementFromArr = 0;
     for (let i = 0; i < tableSizeRows; i++) {
         for (let j = 0; j < tableSizeColumn; j++) {
-            table.rows[i].cells[j].innerText = arr[counter];
-            counter++;
+            gameFieldTable.rows[i].cells[j].innerText = arr[indexOfElementFromArr];
+            indexOfElementFromArr++;
         }
     }
 }
@@ -105,43 +114,46 @@ function newGame() {
 newGame();
 
 function move() {
-    const table = document.getElementById('table');
+    const gameFieldTable = document.getElementById('table');
 
     const elem = event.target;
-    const upCell = +elem.dataset.row - 1;
+    const upCell = elem.dataset.row - 1;
     const downCell = +elem.dataset.row + 1;
-    const leftCell = +elem.dataset.colum - 1;
+    const leftCell = elem.dataset.colum - 1;
     const rightCell = +elem.dataset.colum + 1;
     if(upCell > -1 ){
-        if(table.rows[upCell].cells[elem.dataset.colum].innerText === ''){
-            table.rows[upCell].cells[elem.dataset.colum].innerText = event.target.innerText;
-            event.target.innerText = '';
-        }
+        moveUpDown(gameFieldTable, upCell, elem);
     }
 
     if(downCell < 4 ){
-        if(table.rows[downCell].cells[elem.dataset.colum].innerText === ''){
-            table.rows[downCell].cells[elem.dataset.colum].innerText = event.target.innerText;
-            event.target.innerText = '';
-        }
+        moveUpDown(gameFieldTable, downCell, elem);
     }
 
     if(leftCell > -1 ){
-        if(table.rows[elem.dataset.row].cells[leftCell].innerText === ''){
-            table.rows[elem.dataset.row].cells[leftCell].innerText = event.target.innerText;
-            event.target.innerText = '';
-        }
+        moveLeftRight(gameFieldTable, leftCell, elem);
     }
 
     if(rightCell < 4 ){
-        if(table.rows[elem.dataset.row].cells[rightCell].innerText === ''){
-            table.rows[elem.dataset.row].cells[rightCell].innerText = event.target.innerText;
-            event.target.innerText = '';
-        }
+        moveLeftRight(gameFieldTable, rightCell, elem);
     }
 
     winConditions();
 }
+
+function moveUpDown(gameFieldTable, Cell, elem) {
+    if(gameFieldTable.rows[Cell].cells[elem.dataset.colum].innerText === ''){
+        gameFieldTable.rows[Cell].cells[elem.dataset.colum].innerText = elem.innerText;
+        elem.innerText = '';
+    }
+}
+
+function moveLeftRight(gameFieldTable, Cell, elem) {
+    if(gameFieldTable.rows[elem.dataset.row].cells[Cell].innerText === ''){
+        gameFieldTable.rows[elem.dataset.row].cells[Cell].innerText =  elem.innerText;
+        elem.innerText = '';
+    }
+}
+
 
 
 
